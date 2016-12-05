@@ -1,0 +1,212 @@
+*{
+  text-transform: uppercase;
+}
+html, body{
+  background: #fff;
+}
+.title {
+    color: #363636;
+    font-size: 23px;
+    line-height: 1;
+}
+.column {
+    padding: 4px 10px;
+}
+body,
+.menu,
+.sub-menu {
+  margin: 0;
+  padding: 0;
+  z-index: 99999;
+}
+.clearfix:after{
+  content: '.';
+  display: block;
+  clear: both;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+.menu,
+.sub-menu {
+  list-style: none;
+  background: #3273dc;
+}
+.sub-menu {
+  background: #444;
+}
+.menu a {
+  text-decoration: none;
+    display: block;
+    padding: 5px;
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.menu li {
+  position: relative;
+}
+.menu > li {
+  float: left;
+}
+.menu > li:hover {
+  background: #444;
+}
+.menu li:hover > .sub-menu {
+  display: block;
+}
+.sub-menu {
+  display: none;
+  position: absolute;
+  min-width: 150px;
+}
+.sub-menu li:hover {
+  background: #555;
+}
+.sub-menu .sub-menu {
+  top: 0;
+  left: 100%;
+}
+
+.text-left{
+  text-align: left;
+}
+.text-center{
+  text-align: center;
+}
+.text-right{
+  text-align: right;
+}
+.text-justify{
+  text-align: justify;
+}
+
+#menu-acoes-topo .fa{
+  font-size: 12px;
+}
+
+.checkbox-dropdown {
+  border: 1px solid silver;
+  cursor: pointer; /* use correct mouse pointer when hovering over the dropdown */
+  padding: 5px;
+  position: relative;
+  margin: 0 auto;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Display CSS arrow to the right of the dropdown text */
+.checkbox-dropdown:after {
+  content:'';
+  height: 0;
+  position: absolute;
+  width: 0;
+  border: 6px solid transparent;
+  border-top-color: #000;
+  top: 50%;
+  right: 10px;
+  margin-top: -3px;
+}
+
+/* Reverse the CSS arrow when the dropdown is active */
+.checkbox-dropdown.is-active:after {
+  border-bottom-color: #000;
+  border-top-color: #fff;
+  margin-top: -9px;
+}
+
+.checkbox-dropdown-list {
+  background: #fff;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 100%; /* align the dropdown right below the dropdown text */
+  border: inherit;
+  border-top: none;
+  left: -1px; /* align the dropdown to the left */
+  right: -1px; /* align the dropdown to the right */
+  opacity: 0; /* hide the dropdown */
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+  pointer-events: none; /* avoid mouse click events inside the dropdown */
+}
+.is-active .checkbox-dropdown-list {
+  opacity: 1; /* display the dropdown */
+  pointer-events: auto; /* make sure that the user still can select checkboxes */
+}
+
+.checkbox-dropdown-list li{
+  display: block;
+  border-bottom: 1px solid silver;
+  padding: 5px;
+  -webkit-transition: all 0.2s ease-out;
+  -moz-transition: all 0.2s ease-out;
+  -o-transition: all 0.2s ease-out;
+  -ms-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+}
+.checkbox-dropdown-list li.active{
+  background-color: greenyellow;
+  color: black;
+}
+
+.checkbox-dropdown-list li:hover {
+  background-color: #c41230;
+  color: white;
+}
+
+.linha-selecionada,
+.table tr.linha-selecionada:hover,
+.table.is-striped tbody tr.linha-selecionada:nth-child(even){
+  background-color: yellow;
+}
+
+.disabled {
+  background-color: #555;
+  color: #fff;
+}
+
+.button.is-info,
+a.button.is-info,
+a:visited.button.is-info
+{
+  background-color: #3273dc;
+  border-width: 0;
+  color: white;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+  line-height: 25px !important;
+  margin-bottom: 10px;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
