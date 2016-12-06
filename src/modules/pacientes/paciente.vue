@@ -9,23 +9,28 @@
           <button v-show="isCarregando" class="button is-primary is-loading is-small">
             <i aria-hidden="true" class="fa fa-spinner"></i>
           </button>
-          <button  v-on:click="novo" class="button is-info is-small">
+          <button class="button is-warning is-small" :disabled="isPrevent" v-on:click.prevent="loadPage(paging.page-1)"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+          <button class="button is-warning is-small" :disabled="isNext" v-on:click.prevent="loadPage(paging.page+1)"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+          <button  v-on:click="novo()" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-plus-circle"></i>
           </button>
-          <button  v-on:click="editar" class="button is-info is-small">
+          <button :disabled="disabledBtnDelete" v-on:click="editar()" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-pencil-square"></i>
           </button>
           <button :disabled="true" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-floppy-o"></i>
           </button>
-          <button :disabled="true" class="button is-info is-small">
+          <button :disabled="disabledBtnEdit" v-on:click="excluir()" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-times-circle"></i>
           </button>
-          <button :disabled="true" class="button is-info is-small">
+          <button v-on:click="clean()" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-list"></i>
           </button>
           <button :disabled="true" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-print"></i>
+          </button>
+          <button class="button is-success is-small" v-on:click="preConfig()">
+            <i class="fa fa-cogs" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -59,6 +64,7 @@
               <div v-on:click.prevent="dropdownLimit()" class="checkbox-dropdown" :class="isOpenDropdownLimit">
                 <i>Limite: {{paging.limit}}</i>
                 <ul class="checkbox-dropdown-list">
+                  <li v-on:click.prevent="dropdownUlLimit(5)">5</li>
                   <li v-on:click.prevent="dropdownUlLimit(10)">10</li>
                   <li v-on:click.prevent="dropdownUlLimit(20)">20</li>
                   <li v-on:click.prevent="dropdownUlLimit(30)">30</li>
@@ -81,26 +87,27 @@
               </tr>
             </tbody>
           </table>
-          <nav v-if="isPagination" class="pagination">
-            <a class="button" v-on:click.prevent="loadPage(paging.page-1)">Anterior</a>
-            <a class="button" v-on:click.prevent="loadPage(paging.page+1)">Próximo</a>
-            <ul style="list-style: none;">
-              <li v-for="i in links">
-                <a class="button" :class="[activePage(i.page), i.css]" v-on:click.prevent="loadPage(i.page)"> {{i.page}}</a>
-              </li>
-            </ul>
-          </nav>
         </div>
       </div>
     </div>
+    <modal :active="modalActive" :msg="modalMsg"></modal>
   </div>
 </template>
 
 <script>
+
+import Config from '../../config.js'
+import Modal from '../../util/modal.vue'
+import Inflector from 'inflector-js'
 export default {
+  components:{Modal},
   data () {
     return {
-      url: 'pacientes/index-load',
+      modalActive: false,
+      modalMsg: '',
+      url: 'pacientes',
+      isPrevent : true,
+      isNext: true,
       colums: [
         {
           label: 'ID',
@@ -162,30 +169,34 @@ export default {
         direction: '',
         limit: 20
       },
-      links: [],
-      isPagination: false,
+      disabledBtnDelete: true,
+      disabledBtnEdit: true,
       isCarregando: true,
       isOpenDropdown: '',
       isOpenDropdownLimit: '',
       list: []
     }
   },
-  mounted: function () {
+  mounted ()  {
     this.load();
   },
   methods: {
-    preLoad: function () {
+    preLoad ()  {
       this.load();
     },
-    load: function () {
+    load ()  {
       this.isCarregando = true;
-      this.$http.get('http://localhost/dermacom/' + this.url, {params: this.paging}).then(function (resp) {
+      this.$http.get(Config.url + this.url+'/index-load', {params: this.paging}).then(function (resp) {
         this.retorno(resp);
       }, function (resp) {
         this.retorno(resp);
       });
     },
     retorno: function (resp) {
+      this.isNext = true;
+      this.isPrevent = true;
+      this.disabledBtnDelete = true;
+      this.disabledBtnEdit = true;
       if (resp.status === 200) {
         this.list = [];
         for (let i in resp.body.result) {
@@ -195,28 +206,14 @@ export default {
         this.paging.page = resp.body.paging.page;
         this.paging.pageCount = resp.body.paging.pageCount;
         this.paging.count = resp.body.paging.count;
-        this.gerarPagination();
+        if(this.paging.page < this.paging.pageCount){
+          this.isNext = false;
+        }
+        if(this.paging.page > 1){
+          this.isPrevent = false;
+        }
       }
       this.isCarregando = false;
-    },
-    gerarPagination: function () {
-      let t = Math.ceil(this.paging.count / this.paging.limit);
-      if (t > 0) {
-        let i = this.paging.page - 4;
-        if (i < 1) {
-          i = 1;
-        }
-        let f = this.paging.page + 4;
-        if (f > t) {
-          f = t;
-        }
-        this.links = [];
-        for (i; i <= f; i++) {
-          this.links.push({page: i, css: ''});
-        }
-      }
-
-      this.isPagination = t > 0 ? true : false;
     },
     loadPage: function (page) {
       if (page <= this.paging.pageCount && page >= 1) {
@@ -230,8 +227,8 @@ export default {
       this.paging.page = 1;
       this.preLoad();
     },
-    clear: function () {
-      paging.q = null;
+    clean ()  {
+      this.paging.q = null;
       this.paging.page = 1;
       this.preLoad();
     },
@@ -242,7 +239,7 @@ export default {
         return '';
       }
     },
-    dropdown: function () {
+    dropdown ()  {
       this.isOpenDropdown = this.isOpenDropdown === '' ? 'is-active' : '';
       return;
     },
@@ -250,7 +247,7 @@ export default {
       this.colums[index].ative = !this.colums[index].ative;
       this.colums[index].css = this.colums[index].css === '' ? 'active' : '';
     },
-    dropdownLimit: function () {
+    dropdownLimit ()  {
       this.isOpenDropdownLimit = this.isOpenDropdownLimit === '' ? 'is-active' : '';
       return;
     },
@@ -277,32 +274,36 @@ export default {
       }
     },
     linhaSelecionada: function (key) {
-
       for (let i in this.list) {
         this.list[i].linha_selecionada = '';
       }
 
-      this.list[key].linha_selecionada = 'linha-selecionada';
+      if(this.list[key].linha_selecionada === ''){
+        this.disabledBtnDelete = false;
+        this.disabledBtnEdit = false;
+        this.list[key].linha_selecionada = 'linha-selecionada';
+      }
     },
-    gravar: function () {
-      extra.modal({msg: 'Função indisponivel nesta tela.'}, function () {});
+    gravar ()  {
+      this.openModal('Função indisponivel nesta tela.');
     },
-    editar: function () {
+    editar ()  {
+      this.closeModal();
       let linha = null;
       for (let i in this.list) {
         if (this.list[i].linha_selecionada !== '') {
           linha = this.list[i].id;
         }
       }
+
       if (linha > 0) {
-        //console.log(this.$route);
         this.$router.push({name: 'PacienteEdit', params: { id: linha }});
-        //window.location.href = router.url + 'pacientes/edit/' + linha;
       } else {
-        extra.modal({msg: 'Selecione um registro para ser editado.'}, function () {});
+        this.openModal('Selecione um registro para ser editado.');
       }
     },
-    excluir: function () {
+    excluir ()  {
+      this.closeModal();
       let obj = this;
 
       let linha = null;
@@ -315,7 +316,7 @@ export default {
 
         extra.modalConfirme({msg: 'Deseja realmente excluir este registro?'}, function (a) {
           if (a === true) {
-            obj.$http.get(router.url + Inflector.dasherize(Inflector.underscore(router.params.controller)) + '/delete/' + linha).then(function (resp) {
+            obj.$http.get(Config.url + this.url + '/delete/' + linha).then(function (resp) {
               extra.modal({msg: 'Registro excluido com sucesso.'}, function () {
                 window.location.reload();
               });
@@ -326,18 +327,26 @@ export default {
         });
 
       } else {
-        extra.modal({msg: 'Não foi selecionado nenhum registro pra exclusão.'}, function () {});
+        this.openModal('Não foi selecionado nenhum registro pra exclusão.');
       }
 
     },
-    novo: function () {
-      window.location.href = router.url + Inflector.dasherize(Inflector.underscore(router.params.controller)) + '/add';
+    novo ()  {
+      this.$router.push({name: 'PacienteEdit', params: { id: 0 }});
     },
-    consultar: function () {
-      window.location.href = router.url + Inflector.dasherize(Inflector.underscore(router.params.controller));
-    },
-    imprimir: function () {
+    imprimir ()  {
       extra.modal({msg: 'Funcionalidade não implementada.'}, function () {});
+    },
+    preConfig () {
+      console.log('aaaa')
+    },
+    openModal (msg){
+      this.modalActive = true;
+      this.modalMsg = 'Não foi selecionado nenhum registro pra exclusão.';
+    },
+    closeModal (){
+      this.modalActive = false;
+      this.modalMsg = '';
     }
   }
 }

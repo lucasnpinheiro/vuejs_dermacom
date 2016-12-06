@@ -7,8 +7,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import VueResource from 'vue-resource'
 
-import RouterPacientes from './pacientes/router'
-import RouterLesoes from './lesoes/router'
+import RouterPacientes from './modules/pacientes/router'
+import RouterLesoes from './modules/lesoes/router'
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
