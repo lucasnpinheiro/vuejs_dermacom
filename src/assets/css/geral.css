@@ -9,9 +9,16 @@ html, body{
     font-size: 23px;
     line-height: 1;
 }
-.column {
-    padding: 4px 10px;
+.columns {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: -10px;
 }
+.column {
+  padding: 4px 4px 0px;
+  margin: 0;
+}
+
 body,
 .menu,
 .sub-menu {
@@ -85,7 +92,7 @@ body,
   text-align: justify;
 }
 
-#menu-acoes-topo .fa{
+.fa{
   font-size: 12px;
 }
 
@@ -209,4 +216,14 @@ a:visited.button.is-info
   background: white;
   cursor: inherit;
   display: block;
+}
+.input, .textarea, .button{
+  font-size: 1em;
+  height: 25px;
+}
+.button{
+  line-height: 18px;
+}
+.content ul{
+  margin: 0px;
 }

@@ -37,7 +37,7 @@
   }
   .flexbox-item
   {
-    padding: 0 0 8px 0;
+    /*padding: 0 0 8px 0;*/
   }
   .flexbox-item-grow
   {
@@ -54,7 +54,7 @@
   }
   .fill-area-content {
     /* border: 1px solid #000000; */
-    padding: 10px 2% 0;
+    /*padding: 10px 2% 0;*/
     overflow: auto;
   }
   </style>
@@ -62,31 +62,12 @@
 <body>
   <div class="flexbox-parent" style="overflow: none;" id="app">
     <div class="flexbox-item header">
-      <div class="menu-container">
+      <div class="menu-container" style="height: 35px;">
         <my-menu></my-menu>
       </div>
     </div>
-    <div class="flexbox-item footer">
-      <div id="menu-acoes-topo" style="background: #efefef;">
-        <div class="columns">
-            <div class="column is-6">
-              <h1 class="title">Pacientes</h1>
-            </div>
-            <div class="column is-6 text-right">
-              <my-botoes :novo="true" :consultar="true"></my-botoes>
-            </div>
-        </div>
-      </div>
-    </div>
     <div class="flexbox-item fill-area content flexbox-item-grow">
-      <div class="fill-area-content flexbox-item-grow">
-        <div class="columns">
-          <div class="column is-12 text-center">
             <router-view></router-view>
-          </div>
-        </div>
-
-      </div>
     </div>
   </div>
   <div id="item-extras"></div>

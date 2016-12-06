@@ -2,12 +2,16 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import App from './App.vue'
 import MyMenu from './my-menu.vue'
-import MyBotoes from './my-botoes.vue'
+
+import _ from 'lodash'
+import moment from 'moment'
+import VueResource from 'vue-resource'
 
 import RouterPacientes from './pacientes/router'
 import RouterLesoes from './lesoes/router'
 
 Vue.use(VueRouter)
+Vue.use(VueResource)
 
 const routes = [{ name: 'Dashboard', path: '/', component: App }, ...RouterPacientes, ...RouterLesoes]
 
@@ -25,7 +29,7 @@ const app = new Vue({
       MyBotoes.$emit('btNovo')
     }
   },
-  components: { MyMenu, MyBotoes }
+  components: { MyMenu }
 }).$mount('#app')
 
 

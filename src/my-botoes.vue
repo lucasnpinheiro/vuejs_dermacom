@@ -1,9 +1,9 @@
 <template>
   <div>
-    <button :disabled="!novo" @click="btnNovo()" class="button is-info is-small">
+    <button :disabled="!novo" v-on:click.stop="btnNovo" class="button is-info is-small">
       <i aria-hidden="true" class="fa fa-plus-circle"></i>
     </button>
-    <button :disabled="!editar" @click="btNovo()" class="button is-info is-small">
+    <button :disabled="!editar" @click="btEditar()" class="button is-info is-small">
       <i aria-hidden="true" class="fa fa-pencil-square"></i>
     </button>
     <button :disabled="!salvar" class="button is-info is-small">

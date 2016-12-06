@@ -6,11 +6,18 @@
 
 <script>
 export default {
-  name: 'paciente',
   data () {
     return {
-      msg: 'Dashboard não implementado'
+      msg: 'Lesão não implementado'
     }
+  },
+  methods: {
+    onBtNovo () {
+      console.log('bbbbbb')
+    }
+  },
+  mounted () {
+    console.log(this.$route.params.id);
   }
 }
 </script>
