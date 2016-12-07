@@ -29,9 +29,6 @@
           <button :disabled="true" class="button is-info is-small">
             <i aria-hidden="true" class="fa fa-print"></i>
           </button>
-          <button class="button is-success is-small" v-on:click="preConfig()">
-            <i class="fa fa-cogs" aria-hidden="true"></i>
-          </button>
         </div>
       </div>
     </div>
@@ -39,58 +36,106 @@
       <div class="columns">
         <div class="column is-12" style="margin-top: 5px;">
           <div class="columns">
-            <div class="column is-5">
+            <div class="column">
               <input placeholder="Informe o termo a pesquisar" class="input" type="text" v-model="paging.q">
             </div>
-            <div class="column is-3">
+            <div class="column is-2">
               <button class="button is-info"  @click="search()">
-                <i class="fa fa-search" aria-hidden="true"></i>  Pesquisar
+                <i class="fa fa-search" aria-hidden="true"></i>
               </button>
               <button class="button is-info"  @click="clean()">
-                <i class="fa fa-trash" aria-hidden="true"></i>  Limpar
+                <i class="fa fa-trash" aria-hidden="true"></i>
+              </button>
+              <button class="button is-success is-small" v-on:click="preConfig()">
+                <i class="fa fa-cogs" aria-hidden="true"></i>
               </button>
             </div>
-            <div class="column">
-              <div v-on:click.prevent="dropdown()" class="checkbox-dropdown" :class="isOpenDropdown">
-                <i>Colunas</i>
-                <ul class="checkbox-dropdown-list">
-                  <li v-for="(c, index) in colums" v-on:click.prevent="dropdownUl(index)"  :class="c.css">
-                    {{c.label}}
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="column">
-              <div v-on:click.prevent="dropdownLimit()" class="checkbox-dropdown" :class="isOpenDropdownLimit">
-                <i>Limite: {{paging.limit}}</i>
-                <ul class="checkbox-dropdown-list">
-                  <li v-on:click.prevent="dropdownUlLimit(5)">5</li>
-                  <li v-on:click.prevent="dropdownUlLimit(10)">10</li>
-                  <li v-on:click.prevent="dropdownUlLimit(20)">20</li>
-                  <li v-on:click.prevent="dropdownUlLimit(30)">30</li>
-                  <li v-on:click.prevent="dropdownUlLimit(50)">50</li>
-                  <li v-on:click.prevent="dropdownUlLimit(75)">75</li>
-                  <li v-on:click.prevent="dropdownUlLimit(100)">100</li>
-                </ul>
-              </div>
-            </div>
           </div>
-          <table class="table is-striped is-narrow">
-            <thead>
-              <tr>
-                <th v-for="c in colums" v-if="c.ative" v-on:click.prevent="sort(c.key)" :class="c.css"><i :class="sortCss(c.key)" aria-hidden="true" style="font-size: 13px;margin-top: 4px;"></i>&nbsp;{{c.label}}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, key) in list" v-on:click.prevent="linhaSelecionada(key)" v-on:dblclick.prevent="editar()" :class="item.linha_selecionada">
-                <td v-for="c in colums" v-if="c.ative">{{item[c.chave]}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div style="overflow: auto;">
+            <table class="table is-striped is-narrow">
+              <thead>
+                <tr>
+                  <th v-for="c in colums" v-if="c.ative" v-on:click.prevent="sort(c.coluna)" :class="c.css" style="position: relative;"><i :class="sortCss(c.coluna)" aria-hidden="true" style="font-size: 13px;margin-top: 0px;position: absolute; margin-left: -7px;"></i>&nbsp;{{c.label}}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(item, coluna) in list" v-on:click.prevent="linhaSelecionada(coluna)" v-on:dblclick.prevent="editar()" :class="item.linha_selecionada">
+                  <td v-for="c in colums" v-if="c.ative">{{item[c.chave]}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
     <modal :active="modalActive" :msg="modalMsg"></modal>
+    <div v-show="modalConfigActive" class="modal is-active">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Configurações!</p>
+        </header>
+        <section class="modal-card-body">
+          <h1>Quantide de registro exibido na pagina por paginação.</h1>
+
+          <div class="columns">
+            <div class="column">
+              <label class="label">Limit de registro</label>
+              <p class="control">
+                <span class="select">
+                  <select v-model="configPaging.limite">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="75">75</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                  </select>
+                </span>
+              </p>
+            </div>
+            <div class="column">
+
+              <label class="label">Ordernar por</label>
+              <p class="control">
+                <span class="select">
+                  <select v-model="configPaging.coluna">
+                    <option v-for="c in colums" :value="c.coluna">{{ c.label }}</option>
+                  </select>
+                </span>
+              </p>
+            </div>
+            <div class="column">
+              <label class="label">Tipo de ordenação</label>
+              <p class="control">
+                <span class="select">
+                  <select v-model="configPaging.direcao">
+                    <option value="asc">Crescente</option>
+                    <option value="desc">Decresente</option>
+                  </select>
+                </span>
+              </p>
+            </div>
+
+          </div>
+          <h1>Colunas</h1>
+          <p v-for="c in colums" class="control" style="display: inline-block; width: 33%;">
+            <input type="checkbox" value="1" v-model="c.ative">
+            <label class="checkbox" style="line-height: 13px;">
+              <span>{{ c.label }}</span>
+            </label>
+          </p>
+        </section>
+        <footer class="modal-card-foot">
+          <a class="button is-primary ok" v-on:click="salvarColunas()">Salvar</a>
+        </footer>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -99,67 +144,18 @@
 import Config from '../../config.js'
 import Modal from '../../util/modal.vue'
 import Inflector from 'inflector-js'
+
 export default {
   components:{Modal},
   data () {
     return {
       modalActive: false,
+      modalConfigActive: false,
       modalMsg: '',
       url: 'pacientes',
       isPrevent : true,
       isNext: true,
-      colums: [
-        {
-          label: 'ID',
-          key: 'id',
-          chave: 'id',
-          ative: false,
-          css: ''
-        },
-        {
-          label: 'Nome',
-          key: 'nome',
-          chave: 'nome',
-          ative: true,
-          css: 'active is-6'
-        },
-        {
-          label: 'CPF',
-          key: 'cpf',
-          chave: 'cpf_mask',
-          ative: true,
-          css: 'active'
-        },
-        {
-          label: 'Cartão do SUS',
-          key: 'cartao_sus',
-          chave: 'cartao_sus',
-          ative: false,
-          css: ''
-        },
-        {
-          label: 'Situação',
-          key: 'status',
-          chave: 'status_mask',
-          ative: true,
-          css: 'active'
-        },
-        {
-          label: 'Cidade',
-          key: 'cidade',
-          chave: 'cidade',
-          ative: true,
-          css: 'active'
-        },
-        {
-          label: 'Estado',
-          key: 'estado',
-          chave: 'estado',
-          ative: true,
-          css: 'active'
-        }
-
-      ],
+      colums: [],
       paging: {
         count: 0,
         page: 1,
@@ -169,16 +165,16 @@ export default {
         direction: '',
         limit: 20
       },
+      configPaging: {
+        coluna: '',
+        direcao: '',
+        limite: 20
+      },
       disabledBtnDelete: true,
       disabledBtnEdit: true,
       isCarregando: true,
-      isOpenDropdown: '',
-      isOpenDropdownLimit: '',
       list: []
     }
-  },
-  mounted ()  {
-    this.load();
   },
   methods: {
     preLoad ()  {
@@ -239,49 +235,32 @@ export default {
         return '';
       }
     },
-    dropdown ()  {
-      this.isOpenDropdown = this.isOpenDropdown === '' ? 'is-active' : '';
-      return;
-    },
-    dropdownUl: function (index) {
-      this.colums[index].ative = !this.colums[index].ative;
-      this.colums[index].css = this.colums[index].css === '' ? 'active' : '';
-    },
-    dropdownLimit ()  {
-      this.isOpenDropdownLimit = this.isOpenDropdownLimit === '' ? 'is-active' : '';
-      return;
-    },
-    dropdownUlLimit: function (limit) {
-      this.paging.page = 1;
-      this.paging.limit = limit;
-      this.preLoad();
-    },
-    sort: function (key) {
-      if (this.paging.sort === key) {
+    sort: function (coluna) {
+      if (this.paging.sort === coluna) {
         this.paging.direction = this.paging.direction === 'asc' ? 'desc' : 'asc';
       } else {
         this.paging.direction = 'asc';
       }
-      this.paging.sort = key;
-      this.sortCss(key);
+      this.paging.sort = coluna;
+      this.sortCss(coluna);
       this.preLoad();
     },
-    sortCss: function (key) {
-      if (this.paging.sort === key) {
+    sortCss: function (coluna) {
+      if (this.paging.sort === coluna) {
         return 'fa fa-sort-' + this.paging.direction;
       } else {
         return '';
       }
     },
-    linhaSelecionada: function (key) {
+    linhaSelecionada: function (coluna) {
       for (let i in this.list) {
         this.list[i].linha_selecionada = '';
       }
 
-      if(this.list[key].linha_selecionada === ''){
+      if(this.list[coluna].linha_selecionada === ''){
         this.disabledBtnDelete = false;
         this.disabledBtnEdit = false;
-        this.list[key].linha_selecionada = 'linha-selecionada';
+        this.list[coluna].linha_selecionada = 'linha-selecionada';
       }
     },
     gravar ()  {
@@ -339,15 +318,62 @@ export default {
     },
     preConfig () {
       console.log('aaaa')
+      this.modalConfigActive = true;
     },
     openModal (msg){
+      this.closeModal ();
       this.modalActive = true;
       this.modalMsg = 'Não foi selecionado nenhum registro pra exclusão.';
     },
     closeModal (){
       this.modalActive = false;
       this.modalMsg = '';
+    },
+    getColunas () {
+      this.colums = [];
+      this.$http.get(Config.url + this.url+'/get-colluns-tabela/1/'+this.url, {}).then(function (resp) {
+        if (resp.status === 200) {
+          for (let i in resp.body.result.colunas) {
+            this.colums.push({
+              label: resp.body.result.colunas[i]['label'],
+              coluna: resp.body.result.colunas[i]['coluna'],
+              chave: resp.body.result.colunas[i]['chave'],
+              ative: resp.body.result.colunas[i]['ative'] > 0 ? true : false,
+              css: resp.body.result.colunas[i]['css'],
+              linha_selecionada : ''
+            });
+          }
+
+          this.configPaging.coluna = resp.body.result.config.coluna;
+          this.configPaging.direcao = resp.body.result.config.direcao;
+          this.configPaging.limite = resp.body.result.config.limite;
+
+          this.paging.sort = resp.body.result.config.coluna;
+          this.paging.direction = resp.body.result.config.direcao;
+          this.paging.limit = resp.body.result.config.limite;
+
+          this.sortCss(this.paging.sort);
+
+          this.load();
+        } else {
+          this.openModal('Não há configurações de colunas para este usuário.');
+        }
+      }, function (resp) {
+        this.openModal('Não há configurações de colunas para este usuário.');
+      });
+    },
+    salvarColunas () {
+      this.$http.post(Config.url + this.url+'/set-colluns-tabela/1/'+this.url, {colunas:this.colums, paginacao: this.configPaging}).then(function (resp) {
+        this.getColunas ();
+        this.modalConfigActive = false;
+      }, function (resp) {
+        this.getColunas ();
+        this.modalConfigActive = false;
+      });
     }
+  },
+  mounted() {
+    this.getColunas();
   }
 }
 </script>

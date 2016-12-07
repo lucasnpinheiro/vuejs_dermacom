@@ -218,9 +218,12 @@ a:visited.button.is-info
   cursor: inherit;
   display: block;
 }
-.input, .textarea, .button{
+.input, .textarea, .button, .select select{
   font-size: 1em;
   height: 25px;
+}
+.select:after {
+    margin-top: -10px;
 }
 .button{
   line-height: 18px;
