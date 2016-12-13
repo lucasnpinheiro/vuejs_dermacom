@@ -10,25 +10,26 @@ import VueResource from 'vue-resource'
 import RouterPacientes from './modules/pacientes/router'
 import RouterLesoes from './modules/lesoes/router'
 
+import FilterIdades from './util/idade'
+import FilterTelefone from './util/telefone'
+
+Vue.filter('idade', FilterIdades)
+Vue.filter('telefone', FilterTelefone)
+
 Vue.use(VueRouter)
 Vue.use(VueResource)
+Vue.use(moment)
 
 const routes = [{ name: 'Dashboard', path: '/', component: App }, ...RouterPacientes, ...RouterLesoes]
 
 
 const router = new VueRouter({
-  mode: 'history',
+  //mode: 'history',
   routes // short for routes: routes
 })
 
 const app = new Vue({
   router,
-  methods: {
-    onBtNovo () {
-      alert('aaaaa')
-      MyBotoes.$emit('btNovo')
-    }
-  },
   components: { MyMenu }
 }).$mount('#app')
 

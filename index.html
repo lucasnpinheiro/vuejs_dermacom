@@ -1,76 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>vue_dermacom</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
   <link href='node_modules/font-awesome/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="node_modules/bulma/css/bulma.css"/>
+  <link rel="stylesheet" href="node_modules/bulma/css/bulma.css" />
   <link href="src/assets/css/geral.css" rel="stylesheet" type="text/css">
   <style>
-  *, *:before, *:after
-  {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  html, body
-  {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  body
-  {
-    font-size: 10px;
-  }
-  .flexbox-parent
-  {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* align items in Main Axis */
-    align-items: stretch; /* align items in Cross Axis */
-    align-content: stretch; /* Extra space in Cross Axis */
-  }
-  .flexbox-item
-  {
-    /*padding: 0 0 8px 0;*/
-  }
-  .flexbox-item-grow
-  {
-    flex: 1; /* same as flex: 1 1 auto; */
-  }
-  .fill-area
-  {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start; /* align items in Main Axis */
-    align-items: stretch; /* align items in Cross Axis */
-    align-content: stretch; /* Extra space in Cross Axis */
+    *,
+    *:before,
+    *:after {
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
 
-  }
-  .fill-area-content {
-    /* border: 1px solid #000000; */
-    /*padding: 10px 2% 0;*/
-    overflow: auto;
-  }
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-size: 10px;
+    }
+
+    .flexbox-parent {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      /* align items in Main Axis */
+      align-items: stretch;
+      /* align items in Cross Axis */
+      align-content: stretch;
+      /* Extra space in Cross Axis */
+    }
+
+    .flexbox-item {
+      /*padding: 0 0 8px 0;*/
+    }
+
+    .flexbox-item-grow {
+      flex: 1;
+      /* same as flex: 1 1 auto; */
+    }
+
+    .fill-area {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      /* align items in Main Axis */
+      align-items: stretch;
+      /* align items in Cross Axis */
+      align-content: stretch;
+      /* Extra space in Cross Axis */
+    }
+
+    .fill-area-content {
+      /* border: 1px solid #000000; */
+      /*padding: 10px 2% 0;*/
+      overflow: auto;
+    }
   </style>
 </head>
+
 <body>
   <div class="flexbox-parent" style="overflow: none;" id="app">
     <div class="flexbox-item header">
-      <div class="menu-container" style="height: 35px;">
+      <div class="menu-container" style="height: 25px;">
         <my-menu></my-menu>
       </div>
     </div>
     <div class="flexbox-item fill-area content flexbox-item-grow">
-            <router-view></router-view>
+      <router-view></router-view>
     </div>
   </div>
   <div id="item-extras"></div>
   <script src="/dist/build.js"></script>
 </body>
+
 </html>

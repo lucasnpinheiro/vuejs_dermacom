@@ -4,16 +4,23 @@
 html, body{
   background: #fff;
 }
+.content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+  color: #363636;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 0px;
+  margin-top: 5px;
+}
 .title {
-    color: #363636;
-    font-size: 23px;
-    line-height: 1;
-    margin-bottom: 15px;
+  color: #363636;
+  font-size: 23px;
+  line-height: 1;
+  margin-bottom: 6px;
 }
 .columns {
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-top: -10px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: -10px;
 }
 .column {
   padding: 4px 4px 0px;
@@ -47,13 +54,13 @@ body,
 }
 .menu a {
   text-decoration: none;
-    display: block;
-    padding: 5px;
-    color: #fff;
-    font-family: sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
-    font-weight: 700;
+  display: block;
+  padding: 5px;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 .menu li {
   position: relative;
@@ -223,7 +230,10 @@ a:visited.button.is-info
   height: 25px;
 }
 .select:after {
-    margin-top: -10px;
+  margin-top: -10px;
+}
+.select{
+  height: 24px;
 }
 .button{
   line-height: 18px;
@@ -233,4 +243,11 @@ a:visited.button.is-info
 }
 .modal-card-head, .modal-card-foot{
   padding: 10px;
+}
+.columns.is-gapless > .column.menu-acoes {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.columns.is-gapless:not(:last-child) {
+  margin-bottom: 5px;
 }

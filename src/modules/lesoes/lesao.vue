@@ -1,6 +1,6 @@
 <template>
   <div class="column is-12 text-center">
-        <h2>{{msg}}</h2>
+    <h2>{{msg}}</h2>
   </div>
 </template>
 

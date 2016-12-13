@@ -1,3 +1,3 @@
 export default {
-  url : 'http://localhost/dermacom/'
+  url: 'http://localhost/dermacom/'
 }
